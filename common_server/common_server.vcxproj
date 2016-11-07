@@ -51,16 +51,19 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;CODE_INLINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;CODE_INLINE;USE_OPENSSL;ENABLE_WATCHERS;Py_NO_ENABLE_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\kbengine\kbe\src\lib;..\..\kbengine\kbe\src\server;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\kbengine\kbe\src\lib;..\..\kbengine\kbe\src\server;..\..\kbengine\kbe\src\lib\Python\Include;..\..\kbengine\kbe\src\lib\Python\PC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\kbengine\kbe\src\libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>common_d.lib;network_d.lib;ws2_32.lib;Version.lib;netapi32.lib;helper_d.lib;apr-1_d.lib;aprutil-1_d.lib;expat_d.lib;log4cxx_d.lib;xml_d.lib;resmgr_d.lib;server_d.lib;thread_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>common_d.lib;network_d.lib;ws2_32.lib;Version.lib;netapi32.lib;helper_d.lib;apr-1_d.lib;aprutil-1_d.lib;expat_d.lib;log4cxx_d.lib;xml_d.lib;resmgr_d.lib;server_d.lib;thread_d.lib;python34_d.lib;pyscript_d.lib;entitydef_d.lib;_hashlib_d.pyd;pyexpat_d.pyd;select_d.pyd;_ctypes_d.pyd;_elementtree_d.pyd;unicodedata_d.pyd;_socket_d.pyd;math_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/ignore:4049 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -73,7 +76,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\kbengine\kbe\src\lib;..\..\kbengine\kbe\src\server;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\kbengine\kbe\src\lib;..\..\kbengine\kbe\src\server;..\..\kbengine\kbe\src\lib\Python\Include;..\..\kbengine\kbe\src\lib\Python\PC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -86,13 +89,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\kbengine\kbe\src\lib\python\Modules\getbuildinfo.c" />
     <ClCompile Include="..\public\kbe_env_init.cpp" />
     <ClCompile Include="..\public\kbe_interface.cpp" />
     <ClCompile Include="common_server.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="myscript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common_server.h" />
+    <ClInclude Include="myscript.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

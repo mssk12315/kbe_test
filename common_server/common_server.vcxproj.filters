@@ -30,9 +30,18 @@
     <ClCompile Include="common_server.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="myscript.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\kbengine\kbe\src\lib\python\Modules\getbuildinfo.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common_server.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="myscript.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

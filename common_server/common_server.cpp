@@ -1,6 +1,8 @@
 #include "common_server.h"
+#include "myscript.h"
 
 MessageHandlers messageHandlers;
+Script script;
 
 MESSAGE_STREAM(common_server)
 
@@ -60,7 +62,9 @@ void common_server::run(void)
 	dispatcher.addTask(&tsk);
 	//hTm = dispatcher.addTimer(150 * 1000 * 1000, &tm);
 	dispatcher.addTimer(100 * 1000, this, (void *)10000);
+	dispatcher.addTimer(3 * 1000 * 1000, this, (void *)100);
 	initNetwork();
+	initScript();
 	dispatcher.processUntilBreak();
 
 	//hTm.cancel();
@@ -85,6 +89,13 @@ void common_server::initNetwork(void)
 	dispatcher.registerReadFileDescriptor((KBESOCKET)(*(*pEndPointSrv)), pAccept);
 }
 
+void common_server::initScript(void)
+{
+	Script::getSingleton().install(L"E:/GIT/kbe_test/script/server", L"E:/GIT/kbe_test/script/server;", "KBEngine", BASEAPP_TYPE);
+
+	MyScript::installScript(Script::getSingleton().getModule()/*entryScript.get()*/);
+}
+
 void common_server::handleTimeout(TimerHandle handle, void * pUser)
 {
 	unsigned int iUser = reinterpret_cast<unsigned int>(pUser);
@@ -93,4 +104,43 @@ void common_server::handleTimeout(TimerHandle handle, void * pUser)
 	{
 		netInterface.processChannels(&messageHandlers);
 	}
+	else if (iUser == 100)
+	{
+		runScript();
+	}
+}
+
+void common_server::runScript(void)
+{
+	static PyObjectPtr entryScript;
+
+// 	if (entryScript.get())
+// 	{
+// 		entryScript = PyImport_ReloadModule(entryScript.get());
+// 	}
+// 	else
+	{
+		// 安装入口模块
+		PyObject *entryScriptFileName = PyUnicode_FromString("test");
+		if (entryScriptFileName != NULL)
+		{
+			entryScript = PyImport_Import(entryScriptFileName);
+			SCRIPT_ERROR_CHECK();
+			S_RELEASE(entryScriptFileName);
+		}
+	}
+
+	entryScript = PyImport_ReloadModule(entryScript.get());
+
+	// MyScript::installScript(/*Script::getSingleton().getModule()*/ entryScript.get());
+	
+	PyObject* pyResult = PyObject_CallMethod(entryScript.get(),
+		const_cast<char*>("testScript"),
+		const_cast<char*>("O"),
+		PyBool_FromLong((g_componentGroupOrder == 1) ? 1 : 0));
+
+	if (pyResult != NULL)
+		Py_DECREF(pyResult);
+	else
+		SCRIPT_ERROR_CHECK();
 }

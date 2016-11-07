@@ -109,9 +109,12 @@ public:
 
 	virtual void run(void);
 	virtual void handleTimeout(TimerHandle handle, void * pUser);
+	
+	void runScript(void);
 
 protected:
 	void initNetwork(void);
+	void initScript(void);
 
 protected:
 	EventDispatcher dispatcher;
