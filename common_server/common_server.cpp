@@ -65,6 +65,11 @@ void common_server::run(void)
 	dispatcher.addTimer(3 * 1000 * 1000, this, (void *)100);
 	initNetwork();
 	initScript();
+	threadpool.createThreadPool(2, 4, 8);
+	threadpool.addTask(new PrintTPTask());
+	threadpool.addTask(new PrintTPTask());
+	threadpool.addTask(new PrintTPTask());
+	threadpool.addTask(new PrintTPTask());
 	dispatcher.processUntilBreak();
 
 	//hTm.cancel();
@@ -103,6 +108,7 @@ void common_server::handleTimeout(TimerHandle handle, void * pUser)
 	if (iUser == 10000)
 	{
 		netInterface.processChannels(&messageHandlers);
+		threadpool.onMainThreadTick();
 	}
 	else if (iUser == 100)
 	{

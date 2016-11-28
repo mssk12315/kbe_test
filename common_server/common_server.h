@@ -7,6 +7,7 @@
 #include "network\interface_defs.h"
 #include "network/endpoint.h"
 #include "common\memorystream.h"
+#include "thread\threadpool.h"
 
 using namespace KBEngine;
 using namespace KBEngine::Network;
@@ -102,6 +103,20 @@ private:
 	EndPoint &m_ep;
 };
 
+class PrintTPTask : public thread::TPTask
+{
+public:
+	virtual bool process()
+	{
+		printf("PrintTPTask process TID = %d \n", GetCurrentThreadId());
+		return true;
+	}
+
+	virtual thread::TPTask::TPTaskState presentMainThread(){
+		return thread::TPTask::TPTASK_STATE_COMPLETED;
+	}
+};
+
 class common_server : public TimerHandler
 {
 public:
@@ -122,6 +137,7 @@ protected:
 	PrintTask tsk;
 	CloseTimer tm;
 	TimerHandle hTm;
+	thread::ThreadPool threadpool;
 };
 
 #endif
