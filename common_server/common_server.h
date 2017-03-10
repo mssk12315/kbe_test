@@ -8,6 +8,7 @@
 #include "network/endpoint.h"
 #include "common\memorystream.h"
 #include "thread\threadpool.h"
+#include "xml\xml.h"
 
 using namespace KBEngine;
 using namespace KBEngine::Network;
@@ -128,6 +129,7 @@ public:
 	void runScript(void);
 
 protected:
+	void initConfig(void);
 	void initNetwork(void);
 	void initScript(void);
 

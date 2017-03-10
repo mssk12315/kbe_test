@@ -63,6 +63,7 @@ void common_server::run(void)
 	//hTm = dispatcher.addTimer(150 * 1000 * 1000, &tm);
 	dispatcher.addTimer(100 * 1000, this, (void *)10000);
 	dispatcher.addTimer(3 * 1000 * 1000, this, (void *)100);
+	initConfig();
 	initNetwork();
 	initScript();
 	threadpool.createThreadPool(2, 4, 8);
@@ -73,6 +74,35 @@ void common_server::run(void)
 	dispatcher.processUntilBreak();
 
 	//hTm.cancel();
+}
+
+void common_server::initConfig(void)
+{
+	SmartPointer<XML> defxml(new XML());
+	if (!defxml->openSection("E:/GIT/kbe_test/Debug/a.xml"))
+		return ;
+
+	TiXmlNode* defNode = defxml->getRootNode();
+	if (defNode == NULL)
+	{
+		return;
+	}
+
+	TiXmlNode *volNode = defxml->enterNode(defNode, "Volatile");
+	if (volNode == NULL)
+	{
+		return;
+	}
+
+	TiXmlNode *posNode = defxml->enterNode(volNode, "position");
+	if (posNode != NULL)
+	{
+		printf("postion = %f \n", defxml->getValFloat(posNode));
+	}
+	else
+	{
+		printf("hasnode = %d \n", defxml->hasNode(volNode, "position"));
+	}
 }
 
 void common_server::initNetwork(void)
